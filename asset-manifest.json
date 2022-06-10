@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/react-album-search/static/css/main.8eb70dee.css",
+    "main.js": "/react-album-search/static/js/main.922ca608.js",
+    "static/js/787.0b748059.chunk.js": "/react-album-search/static/js/787.0b748059.chunk.js",
+    "static/media/download.jpg": "/react-album-search/static/media/download.7c032fce5960cd4b0392.jpg",
+    "index.html": "/react-album-search/index.html",
+    "main.8eb70dee.css.map": "/react-album-search/static/css/main.8eb70dee.css.map",
+    "main.922ca608.js.map": "/react-album-search/static/js/main.922ca608.js.map",
+    "787.0b748059.chunk.js.map": "/react-album-search/static/js/787.0b748059.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.8eb70dee.css",
+    "static/js/main.922ca608.js"
+  ]
+}
