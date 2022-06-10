@@ -79,32 +79,30 @@ let artistInput;
 
 
 const Home = () => {
-  const [postResult, setPostResult] = useState([])
+  const [renderResult, setRenderResult] = useState([])
   const [resultCount, setResultCount] = useState(0)
   const [loadLimit, setloadLimit] = useState(4)
   const [arrayHold, setArrayHold] = useState([]);
 
+
   let limitedArray = [];
   let renderThisArray = [];
-  const startAPISearch = async () => {
 
+  const startAPISearch = async () => {
+    
+    setloadLimit(4);
     console.log("testing the value");
     const response = await fetch(`https://itunes.apple.com/search?term=${artistInput}&media=music&entity=album&attribute=artistTerm&limit=200`) // Fetch is a promise/ targets the HTTPS request
     const data = await response.json();
     const totalResults = await data.results;
-    const totalResultsSpliced = await totalResults.splice(0,loadLimit);
-    setArrayHold(totalResults);
-    setResultCount(totalResults.length);
-    console.log(loadLimit);
-    limitedArray = totalResults;
     
-      for (let i = 0; i < loadLimit; i++) {
-        console.log("this is the limited array", limitedArray[i]);
-        console.log("Lets push this this limited set to renderThisArray", renderThisArray.push(limitedArray[i]))
-      }
-      console.log(renderThisArray);
-      setPostResult(totalResultsSpliced);
-      // setPostResult(totalResults);
+ 
+    setResultCount(totalResults.length); // set resultCount to the length of the totalResults array
+    const totalResultsSpliced = await totalResults.splice(0,4); // Create new array to generate the first 4 items.
+    setArrayHold(totalResults); // Store the unused array in arrayHold
+  
+    
+    setRenderResult(totalResultsSpliced);
   }
 
 
@@ -125,6 +123,7 @@ const Home = () => {
   };
 
   const submitInput = async (event) => {
+    setloadLimit(4);
     console.log("The end user is attempting to submit the input value");
     let target = document.getElementById("textbox-search");
     artistInput = target.value;
@@ -134,12 +133,19 @@ const Home = () => {
 
  const loadMoreResults = async() => {
       
-  limitedArray = await arrayHold;
-  console.log("This is the limited array", limitedArray);
-  limitedArray = await limitedArray.splice(0,loadLimit+4);
-  console.log("This is the limited array after splice", limitedArray)
+  let previousResults = await renderResult;
+  let pendingResults = await arrayHold;
+  console.log("This is the array from the previous search, previousResults", previousResults);
+  console.log("This is the array that needs to be joined previousResults", pendingResults)
+  let combinedArray = renderResult.concat(arrayHold);
+  console.log("This is the array that is combined", combinedArray);
+  let resolvedArray = combinedArray.splice(0,loadLimit+4);
+  console.log("This is the array after we raise the loadlimit by 4", resolvedArray);
+  console.log("This is the leftover array after we raise the loadlimit by 4", combinedArray);
+  setArrayHold(combinedArray);
+  console.log("This is the leftover array after we raise the loadlimit by 4. We are checking to see if arrayHold retains teh value", arrayHold);
   setloadLimit(loadLimit+4);
-  setPostResult(limitedArray);
+  setRenderResult(resolvedArray);
       // for (let i = 0; i < loadLimit; i++) {
       //   console.log("this is the limited array", arrayHold[i]);
       //   console.log("Lets push this this limited set to renderThisArray", renderThisArray.push(arrayHold[i]))
@@ -151,10 +157,13 @@ const Home = () => {
 
 const loadAllResults = async() => {
 
-  limitedArray = await arrayHold;
-  console.log("This is the limited array", limitedArray);
+  let previousResults = await renderResult;
+  let pendingResults = await arrayHold;
+  console.log("This is the array from the previous search, previousResults", previousResults);
+  console.log("This is the array that needs to be joined previousResults", pendingResults)
+  let combinedArray = renderResult.concat(arrayHold);
   setloadLimit(resultCount);
-  setPostResult(arrayHold);;
+  setRenderResult(combinedArray);
     }
 
 
@@ -182,7 +191,7 @@ const loadAllResults = async() => {
 
 
     <div id="content-body">
-      {postResult.map((element) => {
+      {renderResult.map((element) => {
         return (
           <div className="album-body">
             <div className="album-container">
