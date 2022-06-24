@@ -1,11 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+
+
 export const AlbumSlice = createSlice({
   name: "album",
   initialState: {
     value: 4,
     album: [],
-    artist: "Your Artist Name"
+    artist: "",
+    totalResults:0
   },
   reducers: {
     IncreaseLimitBy4: (state) => {
@@ -29,7 +32,7 @@ export const AlbumSlice = createSlice({
 export const {
   IncreaseLimitBy4,
   albumArray,
-  searchArtist
+  searchArtist,
 } = AlbumSlice.actions;
 
 export default AlbumSlice.reducer;

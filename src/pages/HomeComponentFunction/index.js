@@ -19,53 +19,39 @@ import LoadOptionsMenu from '../../components/LoadOptionsMenu'
 // Using function REACT 
 const HomeComponentFunction = () => {
   const searchLimit = useSelector((state) => state.album.value);
-  let artistInput = useSelector((state) => state.album.artist);
+  const artistInput = useSelector((state) => state.album.artist);
+  // const totalResults = useSelector((state) => state.album.totalResults)
+  // const allAlbums = useSelector((state) => state.album.albumResults)
   const dispatch = useDispatch();
-
 
   const [renderResult, setRenderResult] = useState([])
   const [resultCount, setResultCount] = useState(0)
-  const [loadLimit, setloadLimit] = useState(searchLimit)
   const [arrayHold, setArrayHold] = useState([]);
-  const [initialValue, setInitialValue] = useState(artistInput)
-
-
+  const [status, setStatus] = useState(0);
+  let localLimit = searchLimit
+  
+  
   const startAPISearch = async () => {
+    setStatus(0)
+    localLimit = 4;
+    let artistSearch = artistInput
     console.log("We are starting the API search function")
     console.log("We are going to catalogue all prior values before this search");
     console.log("This is the state value of artist: ", artistInput)
+    console.log("This is the state value of artist: ", artistSearch)
     console.log("This is the state value of your searchLimit: ", searchLimit)
     const response = await fetch(`https://itunes.apple.com/search?term=${artistInput}&media=music&entity=album&attribute=artistTerm&limit=200`) // Fetch is a promise/ targets the HTTPS request
     const data = await response.json();
-    const totalResults = await data.results;
-    setResultCount(totalResults.length); // set resultCount to the length of the totalResults array
-    setArrayHold(totalResults); // Store the total array
-    console.log("This is the array of the original search" ,arrayHold);
-    const totalResultsSpliced = await totalResults.splice(0,searchLimit); // Create new array to generate the first 4 items.
-    setRenderResult(totalResultsSpliced);
+    const totalResults =  data.results;
+   setResultCount(totalResults.length); // set resultCount to the length of the totalResults array
+   setArrayHold(totalResults); // Store the total array
+   setRenderResult(totalResults);
   }
 
-  useEffect(() => {
-  console.log("This is the album array", albumArray)
-  console.log("This is the searchLimit from Redux", searchLimit)
-  console.log("LoadLimit has changed" ,loadLimit)
-  let combinedArray = renderResult.concat(arrayHold);
-  let resolvedArray = combinedArray.splice(0,loadLimit);
-  setArrayHold(combinedArray);
-  setRenderResult(resolvedArray);
-  }, [loadLimit])
 
-const beginSearchProcess = () =>{
-  startAPISearch();
-}
-
-
-const loadAllResults = async() => {
-   let combinedArray = renderResult.concat(arrayHold);
-   setRenderResult(combinedArray);
+const loadAllResults = () => {
+        setStatus(1)
     }
-
-
 
 
   return (
@@ -76,7 +62,7 @@ const loadAllResults = async() => {
       
         <Card  className="post-submit" >
           <TextField className="search-artist" id="outlined-basic" label="Begin your search" variant="outlined"  placeholder="Type in Artist name"/>
-          <Button id="submit" onClick={() => dispatch(searchArtist()).then( beginSearchProcess())}> Search for your Artist</Button>
+          <Button id="submit" onClick={() => dispatch(searchArtist()).then(startAPISearch())}> Search for your Artist</Button>
           <ResultsBar number={resultCount} artist={artistInput} limit={searchLimit}  />
         </Card>
     </div>
@@ -85,7 +71,9 @@ const loadAllResults = async() => {
 
     <div id="content-body">
     <Grid container spacing={2} > 
-      {renderResult.map((element)=> {
+      {status === 1 ? (
+        <>
+      {renderResult.map((element)=> { 
           return(
             <Grid item sx={2} md={2} lg={2} >
             <MediaCard  
@@ -96,6 +84,26 @@ const loadAllResults = async() => {
             </Grid>
           )
       })}
+        </>
+      ) : (
+        <>
+        {renderResult.map((element,index)=> { if (index< localLimit ) {
+          return(
+            <Grid item sx={2} md={2} lg={2} >
+            <MediaCard  
+            title={element.artistName}
+            description={element.collectionName}
+            imageSource={element.artworkUrl100}
+            />
+            </Grid>
+          )}
+      })}
+       </>
+      )}
+       
+      
+    
+     
    </Grid>
     </div>
 
