@@ -5,7 +5,7 @@ export const AlbumSlice = createSlice({
   initialState: {
     value: 4,
     album: [],
-    artist: "Test"
+    artist: "Your Artist Name"
   },
   reducers: {
     IncreaseLimitBy4: (state) => {
@@ -20,7 +20,6 @@ export const AlbumSlice = createSlice({
     },
     searchArtist: (state) => {
         let target = document.getElementById("outlined-basic");
-        console.log("This is the search value", target.value)
         state.artist = target.value
     }
   }

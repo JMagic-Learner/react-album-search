@@ -19,7 +19,7 @@ import LoadOptionsMenu from '../../components/LoadOptionsMenu'
 // Using function REACT 
 const HomeComponentFunction = () => {
   const searchLimit = useSelector((state) => state.album.value);
-  const artistInput = useSelector((state) => state.album.artist);
+  let artistInput = useSelector((state) => state.album.artist);
   const dispatch = useDispatch();
 
 
@@ -28,28 +28,22 @@ const HomeComponentFunction = () => {
   const [loadLimit, setloadLimit] = useState(searchLimit)
   const [arrayHold, setArrayHold] = useState([]);
   const [initialValue, setInitialValue] = useState(artistInput)
-  const [artistDisplay, setArtistDisplay] = useState();
+
 
   const startAPISearch = async () => {
-    console.log(artistInput)
-    const response = await fetch(`https://itunes.apple.com/search?term=${artistDisplay}&media=music&entity=album&attribute=artistTerm&limit=200`) // Fetch is a promise/ targets the HTTPS request
+    console.log("We are starting the API search function")
+    console.log("We are going to catalogue all prior values before this search");
+    console.log("This is the state value of artist: ", artistInput)
+    console.log("This is the state value of your searchLimit: ", searchLimit)
+    const response = await fetch(`https://itunes.apple.com/search?term=${artistInput}&media=music&entity=album&attribute=artistTerm&limit=200`) // Fetch is a promise/ targets the HTTPS request
     const data = await response.json();
-    const totalResults = data.results;
+    const totalResults = await data.results;
     setResultCount(totalResults.length); // set resultCount to the length of the totalResults array
     setArrayHold(totalResults); // Store the total array
     console.log("This is the array of the original search" ,arrayHold);
     const totalResultsSpliced = await totalResults.splice(0,searchLimit); // Create new array to generate the first 4 items.
     setRenderResult(totalResultsSpliced);
   }
-
-
-  useEffect(() => {
-    console.log("we have detected a change in initialVlaue")
-    console.log(artistInput);
-    console.log(searchLimit)
-  }, [initialValue])
-
-
 
   useEffect(() => {
   console.log("This is the album array", albumArray)
@@ -61,33 +55,14 @@ const HomeComponentFunction = () => {
   setRenderResult(resolvedArray);
   }, [loadLimit])
 
-
-
-  // const submitInput = async (event) => {
-  //   // setloadLimit(4);
-   
-  //   console.log("The end user is attempting to submit the input value");
-  //   let target = document.getElementById("outlined-basic");
-  //   artistInput = target.value;
-  //   () => dispatch(searchArtist(artistInput))
-  //   console.log("The end user has designated " + artistInput + " as the search parameter");
-  //   startAPISearch()
-    
-  // };
 const beginSearchProcess = () =>{
-  setArtistDisplay(artistInput) 
   startAPISearch();
 }
 
 
 const loadAllResults = async() => {
-
-  // let previousResults = await renderResult;
-  // let pendingResults = await arrayHold;
-  // console.log("This is the array from the previous search, previousResults", previousResults);
-  // console.log("This is the array that needs to be joined previousResults", pendingResults)
    let combinedArray = renderResult.concat(arrayHold);
-  setRenderResult(combinedArray);
+   setRenderResult(combinedArray);
     }
 
 
@@ -99,17 +74,11 @@ const loadAllResults = async() => {
       <Typography variant="h2" className="main-title"> Album Search </Typography>
  
       
-          <Card  className="post-submit" >
+        <Card  className="post-submit" >
           <TextField className="search-artist" id="outlined-basic" label="Begin your search" variant="outlined"  placeholder="Type in Artist name"/>
           <Button id="submit" onClick={() => dispatch(searchArtist()).then( beginSearchProcess())}> Search for your Artist</Button>
-
-        
-        {/* <button id="refresh"><a href="" > Refresh/Clear Search </a></button> */}
-        
-      
-     
-      <ResultsBar number={resultCount} artist={artistDisplay} limit={searchLimit}  />
-      </Card>
+          <ResultsBar number={resultCount} artist={artistInput} limit={searchLimit}  />
+        </Card>
     </div>
 
 
