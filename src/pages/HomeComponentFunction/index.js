@@ -19,7 +19,7 @@ import LoadOptionsMenu from '../../components/LoadOptionsMenu'
 // Using function REACT 
 const HomeComponentFunction = () => {
   const searchLimit = useSelector((state) => state.album.value);
-  let artistInput = useSelector((state) => state.album.artist);
+  const artistInput = useSelector((state) => state.album.artist);
   const dispatch = useDispatch();
 
 
@@ -27,11 +27,12 @@ const HomeComponentFunction = () => {
   const [resultCount, setResultCount] = useState(0)
   const [loadLimit, setloadLimit] = useState(searchLimit)
   const [arrayHold, setArrayHold] = useState([]);
+  const [initialValue, setInitialValue] = useState(artistInput)
   const [artistDisplay, setArtistDisplay] = useState();
 
   const startAPISearch = async () => {
     console.log(artistInput)
-    const response = await fetch(`https://itunes.apple.com/search?term=${artistInput}&media=music&entity=album&attribute=artistTerm&limit=200`) // Fetch is a promise/ targets the HTTPS request
+    const response = await fetch(`https://itunes.apple.com/search?term=${artistDisplay}&media=music&entity=album&attribute=artistTerm&limit=200`) // Fetch is a promise/ targets the HTTPS request
     const data = await response.json();
     const totalResults = data.results;
     setResultCount(totalResults.length); // set resultCount to the length of the totalResults array
@@ -43,9 +44,10 @@ const HomeComponentFunction = () => {
 
 
   useEffect(() => {
+    console.log("we have detected a change in initialVlaue")
     console.log(artistInput);
     console.log(searchLimit)
-  }, [])
+  }, [initialValue])
 
 
 
@@ -72,6 +74,10 @@ const HomeComponentFunction = () => {
   //   startAPISearch()
     
   // };
+const beginSearchProcess = () =>{
+  setArtistDisplay(artistInput) 
+  startAPISearch();
+}
 
 
 const loadAllResults = async() => {
@@ -95,14 +101,14 @@ const loadAllResults = async() => {
       
           <Card  className="post-submit" >
           <TextField className="search-artist" id="outlined-basic" label="Begin your search" variant="outlined"  placeholder="Type in Artist name"/>
-          <Button id="submit" onClick={() => dispatch(searchArtist()).then( startAPISearch())}> Search for your Artist</Button>
+          <Button id="submit" onClick={() => dispatch(searchArtist()).then( beginSearchProcess())}> Search for your Artist</Button>
 
         
         {/* <button id="refresh"><a href="" > Refresh/Clear Search </a></button> */}
         
       
      
-      <ResultsBar number={resultCount} artist={artistInput} limit={searchLimit}  />
+      <ResultsBar number={resultCount} artist={artistDisplay} limit={searchLimit}  />
       </Card>
     </div>
 
