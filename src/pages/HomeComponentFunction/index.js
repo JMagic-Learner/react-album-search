@@ -1,73 +1,77 @@
 import React, { useEffect, useState } from "react"
-import { useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { IncreaseLimitBy4, albumArray, searchArtist } from "../../slices/AlbumSlice"
 import ResultsBar from '../../components/ResultsCount';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
 
-let artistInput;
+// MUI IMPORTS
+import { Typography } from '@mui/material';
+import Card from '@mui/material/Card';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+// COMPONENT IMPORTS
+import MediaCard from "../../components/MediaCard";
+import LoadOptionsMenu from '../../components/LoadOptionsMenu'
+
+
 
 // Using function REACT 
 const HomeComponentFunction = () => {
+  const searchLimit = useSelector((state) => state.album.value);
+  let artistInput = useSelector((state) => state.album.artist);
+  const dispatch = useDispatch();
+
+
   const [renderResult, setRenderResult] = useState([])
   const [resultCount, setResultCount] = useState(0)
-  const [loadLimit, setloadLimit] = useState(4)
+  const [loadLimit, setloadLimit] = useState(searchLimit)
   const [arrayHold, setArrayHold] = useState([]);
+  const [artistDisplay, setArtistDisplay] = useState();
 
   const startAPISearch = async () => {
-    
-    setloadLimit(4);
-    console.log("testing the value");
+    console.log(artistInput)
     const response = await fetch(`https://itunes.apple.com/search?term=${artistInput}&media=music&entity=album&attribute=artistTerm&limit=200`) // Fetch is a promise/ targets the HTTPS request
     const data = await response.json();
     const totalResults = data.results;
     setResultCount(totalResults.length); // set resultCount to the length of the totalResults array
     setArrayHold(totalResults); // Store the total array
-    console.log(arrayHold);
-    const totalResultsSpliced = await totalResults.splice(0,4); // Create new array to generate the first 4 items.
+    console.log("This is the array of the original search" ,arrayHold);
+    const totalResultsSpliced = await totalResults.splice(0,searchLimit); // Create new array to generate the first 4 items.
     setRenderResult(totalResultsSpliced);
   }
 
 
-
   useEffect(() => {
-    startAPISearch()
+    console.log(artistInput);
+    console.log(searchLimit)
   }, [])
 
+
+
   useEffect(() => {
-    submitInput();
-  }, [])
-
-  const showInput = async (event) => {
- 
-    console.log("The end user is typing in a input");
-    let target = document.getElementById("textbox-search");
-   
-  };
-
-  const submitInput = async (event) => {
-    setloadLimit(4);
-    console.log("The end user is attempting to submit the input value");
-    let target = document.getElementById("textbox-search");
-    artistInput = target.value;
-    console.log("The end user has designated " + artistInput + " as the search parameter");
-    startAPISearch()
-  };
-
- const loadMoreResults = async() => {
-      
-  // let previousResults = renderResult;
-  // let pendingResults =  arrayHold;
-  // console.log("This is the array from the previous search, previousResults", previousResults);
-  // console.log("This is the array that needs to be joined previousResults", pendingResults)
+  console.log("This is the album array", albumArray)
+  console.log("This is the searchLimit from Redux", searchLimit)
+  console.log("LoadLimit has changed" ,loadLimit)
   let combinedArray = renderResult.concat(arrayHold);
-  // console.log("This is the array that is combined", combinedArray);
-  let resolvedArray = combinedArray.splice(0,loadLimit+4);
-  // console.log("This is the array after we raise the loadlimit by 4", resolvedArray);
-  // console.log("This is the leftover array after we raise the loadlimit by 4", combinedArray);
+  let resolvedArray = combinedArray.splice(0,loadLimit);
   setArrayHold(combinedArray);
-  // console.log("This is the leftover array after we raise the loadlimit by 4. We are checking to see if arrayHold retains teh value", arrayHold);
-  setloadLimit(loadLimit+4);
   setRenderResult(resolvedArray);
-  }
+  }, [loadLimit])
 
+
+
+  // const submitInput = async (event) => {
+  //   // setloadLimit(4);
+   
+  //   console.log("The end user is attempting to submit the input value");
+  //   let target = document.getElementById("outlined-basic");
+  //   artistInput = target.value;
+  //   () => dispatch(searchArtist(artistInput))
+  //   console.log("The end user has designated " + artistInput + " as the search parameter");
+  //   startAPISearch()
+    
+  // };
 
 
 const loadAllResults = async() => {
@@ -77,57 +81,59 @@ const loadAllResults = async() => {
   // console.log("This is the array from the previous search, previousResults", previousResults);
   // console.log("This is the array that needs to be joined previousResults", pendingResults)
    let combinedArray = renderResult.concat(arrayHold);
-  setloadLimit(resultCount);
   setRenderResult(combinedArray);
     }
 
 
 
 
-  return (<div>
+  return (
+  <div>
     <div className="banner">
-      <h1 className="main-title"> Album Search </h1>
-      <nav className="post-submit">
-        <textarea name="search-artist"
-          placeholder="Type in Artist name"
-          id="textbox-search"
-          onChange={showInput}>
-        </textarea>
-        {/* <input type="text" id="textbox-search"> </input> */}
-        <button id="submit" onClick={submitInput}> Search for your Artist</button>
-        {/* <button id="refresh"><a href="" > Refresh/Clear Search </a></button> */}
-      </nav>
-      <ResultsBar number={resultCount} artist={artistInput} limit={loadLimit}  />
-      <div id="load-display">
+      <Typography variant="h2" className="main-title"> Album Search </Typography>
+ 
       
-    </div>
+          <Card  className="post-submit" >
+          <TextField className="search-artist" id="outlined-basic" label="Begin your search" variant="outlined"  placeholder="Type in Artist name"/>
+          <Button id="submit" onClick={() => dispatch(searchArtist()).then( startAPISearch())}> Search for your Artist</Button>
+
+        
+        {/* <button id="refresh"><a href="" > Refresh/Clear Search </a></button> */}
+        
+      
+     
+      <ResultsBar number={resultCount} artist={artistInput} limit={searchLimit}  />
+      </Card>
     </div>
 
 
 
     <div id="content-body">
-      {renderResult.map((element) => {
-        return (
-          <div className="album-body">
-            <div className="album-container">
-              <img className="container-child" src={element.artworkUrl100}></img>
-            </div>
-            <div className="album-container2">
-              <ul>
-                <li className="container-child"> {element.artistName}</li>
-                <li className="container-child"> {element.collectionName}</li>
-              </ul>
-            </div>
-
-
-          </div>)
+    <Grid container spacing={2} > 
+      {renderResult.map((element)=> {
+          return(
+            <Grid item sx={2} md={2} lg={2} >
+            <MediaCard  
+            title={element.artistName}
+            description={element.collectionName}
+            imageSource={element.artworkUrl100}
+            />
+            </Grid>
+          )
       })}
+   </Grid>
     </div>
-    <div className="load-more-container">
-          <button className="load-more-button" onClick={loadMoreResults}>Load More</button>
-          <button className="load-all-button" onClick={loadAllResults}> Load All </button>
-        </div>
-  </div>
+
+    {resultCount > 0? (
+      <>
+      <LoadOptionsMenu loadAll={loadAllResults}/>
+  
+    </>
+    ) : (
+      
+      <Typography> Search for your artists</Typography>
+    )}
+   </div>
   )
 }
 

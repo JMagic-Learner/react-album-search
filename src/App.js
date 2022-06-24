@@ -8,8 +8,8 @@ function App() {
   return (
     <div className="App">
       {/* Two ways to diplay this application, one via REACT class components and the other via REACT functional components */}
-      {/* <HomeComponentFunction/> */}
-      <HomeComponentClass/>
+      <HomeComponentFunction/>
+      {/* <HomeComponentClass/> */}
     
     </div>
   );

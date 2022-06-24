@@ -1,12 +1,14 @@
 import React from 'react'
+import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
 
 class ResultsBar extends React.Component {
     render() {
-        return<div id="results"> 
-        <p id="results-display"> Search Albums by {this.props.artist}</p>
-        <p id="results-display"> Limit results to {this.props.limit}</p>
-        <p id="results-display"> Total results: {this.props.number}</p>
-        </div>
+        return<section id="results"> 
+        <Typography id="results-display"> Search Albums by {this.props.artist} </Typography>
+        <Typography id="results-display"> Limit results to {this.props.limit}</Typography>
+        <Typography id="results-display"> Total results: {this.props.number}</Typography>
+        </section>
     }
 
 }

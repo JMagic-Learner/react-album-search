@@ -19,7 +19,7 @@ body {
 .post-submit {
   display:flex;
   margin:auto;
-  width:80%;
+  width:50%;
 }
 
 .main-title{
@@ -30,10 +30,6 @@ li {
   list-style:none;
 }
 
-#textbox-search {
-  width:100%;
-  height:50px;
-}
 
 .banner {
   position:fixed;
@@ -122,3 +118,15 @@ li {
 }
 
 
+.margin-between-card {
+  margin:2.5%
+}
+
+.searchBar {
+  margin:auto;
+}
+
+.search-artist {
+  width:50%;
+
+}
