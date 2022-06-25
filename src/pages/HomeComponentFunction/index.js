@@ -28,12 +28,9 @@ import {
 const HomeComponentFunction = () => {
   const searchLimit = useSelector((state) => state.album.value);
   const artistInput = useSelector((state) => state.album.artist);
-  const globalState = useSelector((state) => state.album);
   const dispatch = useDispatch();
 
- 
 
- 
   const [renderResult, setRenderResult] = useState([])
   const [resultCount, setResultCount] = useState(0)
   const [renderLimit, setRenderLimit] = useState(searchLimit)
@@ -45,13 +42,11 @@ const HomeComponentFunction = () => {
     console.log("We are starting the API search function")
     console.log("We are going to catalogue all prior values before this search");
     console.log("This is the state value of artist: ", artistInput)
-    console.log("This is the global state: ", globalState)
     console.log("This is the state value of your searchLimit: ", searchLimit)
     const response = await fetch(`https://itunes.apple.com/search?term=${artistInput}&media=music&entity=album&attribute=artistTerm&limit=200`) // Fetch is a promise/ targets the HTTPS request
     const data = await response.json();
     const totalResults =  data.results;
    setResultCount(totalResults.length); // set resultCount to the length of the totalResults array
-  
    setRenderResult(totalResults);
   }
 
