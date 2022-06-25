@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/react-album-search/static/css/main.df7f61cc.css",
-    "main.js": "/react-album-search/static/js/main.838115dc.js",
+    "main.css": "/react-album-search/static/css/main.3d923e57.css",
+    "main.js": "/react-album-search/static/js/main.1f186842.js",
     "static/js/787.4f5f26d8.chunk.js": "/react-album-search/static/js/787.4f5f26d8.chunk.js",
     "static/media/download.jpg": "/react-album-search/static/media/download.7c032fce5960cd4b0392.jpg",
     "index.html": "/react-album-search/index.html",
-    "main.df7f61cc.css.map": "/react-album-search/static/css/main.df7f61cc.css.map",
-    "main.838115dc.js.map": "/react-album-search/static/js/main.838115dc.js.map",
+    "main.3d923e57.css.map": "/react-album-search/static/css/main.3d923e57.css.map",
+    "main.1f186842.js.map": "/react-album-search/static/js/main.1f186842.js.map",
     "787.4f5f26d8.chunk.js.map": "/react-album-search/static/js/787.4f5f26d8.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.df7f61cc.css",
-    "static/js/main.838115dc.js"
+    "static/css/main.3d923e57.css",
+    "static/js/main.1f186842.js"
   ]
 }
