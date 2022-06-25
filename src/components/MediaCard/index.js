@@ -31,22 +31,20 @@ export default function MediaCard(props) {
   return (
     <div className="margin-between-card">
     <ThemeProvider theme={theme}>
-    <Card sx={4}>
-       <CardMedia className="container-child"
+    <Card sx={5} className="container-child">
+       <CardMedia 
         component="img"
-        height="200"
         image={props.imageSource}
         alt="image is passed through props"
       /> 
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+        <Typography gutterBottom variant="p" component="div">
           {props.title}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="p" color="text.secondary">
           {props.description}
         </Typography>
       </CardContent>
-
     </Card>
     </ThemeProvider>
     </div>

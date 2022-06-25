@@ -16,11 +16,7 @@ body {
   margin-top:-1%;
 }
 
-.post-submit {
-  display:flex;
-  margin:auto;
-  width:50%;
-}
+
 
 .main-title{
   text-align:center;
@@ -34,20 +30,10 @@ li {
 .banner {
   position:fixed;
   width:100%;
-  background-image: url("./assets/download.jpg");
-  margin-top:0%;
+  margin-top:1%;
   padding-bottom:1%;
 }
 
-.container1{
-  width:80%;
-}
-
-.action-buttons {
-  width:50%;
-  background-color:red;
-  
-}
 
 #results {
   margin:auto;
@@ -65,42 +51,13 @@ li {
 #content-body {
   display:flex;
   flex-wrap: wrap;
-  margin:1%;
-  width:100%;
+  margin:auto;
+  width:95%;
   padding-top:17%;
+  background-color:gray
 }
 
-.album-container{
-  width:90%;
-  margin:10%;
-  margin-top:15%;
-  text-align:center;
 
-}
-.album-container2{
-  width:90%;
-  margin:auto;
-  margin-top:15%;
-
-}
-
-#load-display {
-  width:100%;
-  margin-top:0%;
-  padding-bottom:1%;
-}
-
-.load-more-container {
-  width:50%;
-  margin:auto;
-}
-
-.load-more-button ,.load-all-button{
-  
-  width:100%;
-  text-align:center;
-  background-color:white;
-}
 
 .loader {
   margin:auto;
@@ -119,14 +76,55 @@ li {
 
 
 .margin-between-card {
-  margin:2.5%
+  margin:0.5%;
 }
 
-.searchBar {
-  margin:auto;
-}
 
+
+/* Where you input search  */
 .search-artist {
   width:50%;
+  margin:auto;
+  background-color:white;
+  text-align:center
+}
 
+/* Behind the background of the searchbar */
+.post-submit {
+  display:flex;
+  margin:auto;
+  width:50%;
+  height:100px;
+}
+
+.search-bar-container {
+  background-image: url("./assets/download.jpg");
+  width:100%;
+}
+
+#submit-button {
+  outline:auto;
+  margin:auto;
+  width:50%;
+  background-color:white;
+}
+
+
+/* load more buttons options and div containers */
+#load-options{
+  width:100%;
+  margin:auto
+}
+
+.load-more-button ,.load-all-button{
+  width:50%;
+  text-align: center;
+ 
+}
+
+.container-child {
+  height:400px
+}
+.container-child :hover {
+  height:430px
 }
