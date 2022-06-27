@@ -6,10 +6,9 @@ import {
     storeArtist,
     beginProcess } from "./AlbumSlice"
 
-
-export function MiddleWare() {
-    const searchLimit = useSelector((state) => state.album.value);
-    console.log(searchLimit)
-    return searchLimit
+function StartProcess() {
+   return console.log("Albumslice has triggered this function")
 }
 
+
+export default StartProcess

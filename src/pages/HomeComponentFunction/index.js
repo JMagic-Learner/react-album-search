@@ -19,8 +19,10 @@ import {
   IncreaseLimitBy3,
   sendArtistRequest,
   storeArtist,
-  resetValue } from "../../slices/AlbumSlice"
-
+  resetValue,
+  checkInitialState,
+  StartProcess } from "../../slices/AlbumSlice"
+import { StartAPISearch } from "../../api";
 
 
 
@@ -28,22 +30,27 @@ import {
 const HomeComponentFunction = () => {
   const searchLimit = useSelector((state) => state.album.value);
   const artistInput = useSelector((state) => state.album.artist);
+  // const globalAlbums = useSelector((state) => state.album.albumResults);
   const dispatch = useDispatch();
 
 
   const [renderResult, setRenderResult] = useState([])
   const [resultCount, setResultCount] = useState(0)
   const [renderLimit, setRenderLimit] = useState(searchLimit)
-  
+ 
   
   const startAPISearch = async () => {
     dispatch(resetValue({type:"album/reset"}))
     setRenderLimit(3)
+    // let returnedFromAPI = StartAPISearch(artistInput)
+    // setResultCount(returnedFromAPI.length)
+    // setRenderResult(returnedFromAPI)
     console.log("We are starting the API search function")
     console.log("We are going to catalogue all prior values before this search");
     console.log("This is the state value of artist: ", artistInput)
     console.log("This is the state value of your searchLimit: ", searchLimit)
     const response = await fetch(`https://itunes.apple.com/search?term=${artistInput}&media=music&entity=album&attribute=artistTerm&limit=200`) // Fetch is a promise/ targets the HTTPS request
+    // const response = await fetch(`https://itunes.apple.com/search?term=${artistInput}&media=music&entity=album&attribute=artistTerm&limit=200`) // Fetch is a promise/ targets the HTTPS request
     const data = await response.json();
     const totalResults =  data.results;
    setResultCount(totalResults.length); // set resultCount to the length of the totalResults array
@@ -62,7 +69,9 @@ const HomeComponentFunction = () => {
 
     const BeginSearchProcess = () => {
       dispatch(sendArtistRequest({ type: "album/search" }))
+      dispatch(checkInitialState({ type: "album/statusReport" }))
       startAPISearch()
+      
     }
 
 
